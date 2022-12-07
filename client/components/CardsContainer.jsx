@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from './Card.jsx';
+import CardDetails from './CardDetails.jsx';
 
 const CardsContainer = ({ colorProgress }) => {
   const style = {
@@ -7,7 +8,8 @@ const CardsContainer = ({ colorProgress }) => {
     justifyContent: 'center',
     flexWrap: 'wrap',
     gap: '40px',
-    paddingTop: '20px'
+    paddingTop: '20px',
+    filter: 'blur(2px)' // IF CARD DETAIL IS NOT NONE
   };
 
   const cards = colorProgress.map(({color, progress}) => 
@@ -15,8 +17,11 @@ const CardsContainer = ({ colorProgress }) => {
   );
 
   return (
-    <div style={style}>
-      {cards}
+    <div>
+      <CardDetails color={'saffron'} gray={false} />
+      <div style={style}>
+        {cards}
+      </div>
     </div>
   );
 };
