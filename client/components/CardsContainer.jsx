@@ -1,24 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Card from './Card.jsx';
 import CardDetails from './CardDetails.jsx';
 
 const CardsContainer = ({ colorProgress }) => {
+  const [currentCard, setCurrentCard] = useState(null);
+
+  const selectCard = (card) => setCurrentCard(card);
+
   const style = {
     display: 'flex',
     justifyContent: 'center',
     flexWrap: 'wrap',
     gap: '40px',
     paddingTop: '20px',
-    filter: 'blur(2px)' // IF CARD DETAIL IS NOT NONE
+    filter: !currentCard ? '' : 'blur(2px)'
   };
 
   const cards = colorProgress.map(({color, progress}) => 
-    <Card color={color} gray={progress < 100} />
+    <Card color={color} gray={progress < 100} selectCard={selectCard} />
   );
 
   return (
     <div>
-      <CardDetails color={'saffron'} gray={false} />
+      {currentCard && <CardDetails color={currentCard.color} gray={currentCard.gray} />}
       <div style={style}>
         {cards}
       </div>
