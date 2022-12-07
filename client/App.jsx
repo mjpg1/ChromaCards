@@ -9,12 +9,14 @@ const colors = [
   'mustard', 'neon_green', 'peach_pink', 'prussian_blue', 'saffron', 'scarlet', 'sea_foam',
   'shocking_pink', 'taupe', 'tyrian_purple', 'umber', 'uranian_blue', 'violet', 'viridian',
   'xanadu'
-]
+];
+
+const colorProgress = colors.map(color => ({ color, progress: 0 }));
 
 const App = () => {
   return (
     <div>
-      <CardsContainer colors={colors} />
+      <CardsContainer colorProgress={colorProgress} />
     </div>
   );
 };

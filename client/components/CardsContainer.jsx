@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from './Card.jsx';
 
-const CardsContainer = ({ colors }) => {
+const CardsContainer = ({ colorProgress }) => {
   const style = {
     display: 'flex',
     justifyContent: 'center',
@@ -10,7 +10,10 @@ const CardsContainer = ({ colors }) => {
     paddingTop: '20px'
   };
 
-  const cards = colors.map(color => <Card color={color} />);
+  const cards = colorProgress.map(({color, progress}) => 
+    <Card color={color} gray={progress < 100} />
+  );
+
   return (
     <div style={style}>
       {cards}
