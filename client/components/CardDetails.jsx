@@ -1,7 +1,7 @@
 import React from 'react';
 import ProgressBar from './ProgressBar.jsx';
 
-const CardDetails = ({ color, gray }) => {
+const CardDetails = ({ colorDetails }) => {
   const containerStyle = {
     display: 'flex',
     flexDirection: 'column',
@@ -21,12 +21,12 @@ const CardDetails = ({ color, gray }) => {
     borderRadius: '1.2em',
   }
 
-  const type = gray ? 'gray' : 'color';
+  const type = colorDetails.progress < 100 ? 'gray' : 'color';
 
   return (
     <div style={containerStyle}>
-      <img src={`client/assets/${type}-cards/${color}.png`} style={cardStyle} />
-      <ProgressBar color={color} progress={50} /> {/* PROGRESS PROP HARD CODED RN */}
+      <img src={`client/assets/${type}-cards/${colorDetails.color}.png`} style={cardStyle} />
+      <ProgressBar color={colorDetails.code} progress={colorDetails.progress} />
     </div>
   );
 };

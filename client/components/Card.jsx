@@ -13,7 +13,7 @@ const Card = ({ color, gray, selectCard }) => {
     <img
       src={`client/assets/${type}-cards/${color}.png`}
       style={style}
-      onClick={() => selectCard({ color, gray })}
+      onClick={selectCard}
     />
   );
 };

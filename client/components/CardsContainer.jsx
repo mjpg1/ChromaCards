@@ -22,13 +22,18 @@ const CardsContainer = ({ colorProgress }) => {
     filter: !currentCard ? '' : 'blur(2px)' // reduce blur or addition transition?
   };
 
-  const cards = colorProgress.map(({color, progress}) => 
-    <Card color={color} gray={progress < 100} selectCard={selectCard} />
+  const cards = colorProgress.map(({ color, code, progress}) => 
+    <Card
+      key={color}
+      color={color}
+      gray={progress < 100}
+      selectCard={() => selectCard({ color, code, progress })}
+    />
   );
 
   return (
     <div onClick={unselectCard}>
-      {currentCard && <CardDetails color={currentCard.color} gray={currentCard.gray} />}
+      {currentCard && <CardDetails colorDetails={currentCard} />}
       <div style={style}>
         {cards}
       </div>

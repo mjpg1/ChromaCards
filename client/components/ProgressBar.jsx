@@ -8,7 +8,7 @@ const ProgressBar = ({ color, progress }) => {
   };
 
   const fillStyle = {
-    backgroundColor: 'red',
+    backgroundColor: color,
     height: '15px',
     width: `${progress}%`
   }
