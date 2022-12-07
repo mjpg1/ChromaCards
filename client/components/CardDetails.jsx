@@ -8,7 +8,6 @@ const CardDetails = ({ color, gray }) => {
     alignItems: 'center',
     justifyContent: 'center',
     gap: '15px',
-    // textAlign: 'center',
     zIndex: '1',
     position: 'fixed',
     top: '50%',
@@ -27,7 +26,7 @@ const CardDetails = ({ color, gray }) => {
   return (
     <div style={containerStyle}>
       <img src={`client/assets/${type}-cards/${color}.png`} style={cardStyle} />
-      <ProgressBar color={color} progress={50} />
+      <ProgressBar color={color} progress={50} /> {/* PROGRESS PROP HARD CODED RN */}
     </div>
   );
 };
