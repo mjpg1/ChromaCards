@@ -94,3 +94,14 @@ button:hover {
   font-size: 23px;
   color: #97becc;
 }
+
+
+
+@keyframes barGrow {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}

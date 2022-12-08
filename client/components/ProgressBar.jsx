@@ -19,6 +19,8 @@ const ProgressBar = ({ color, progress, mini }) => {
     background: `linear-gradient(90deg, ${color}50, ${color}${alpha})`,
     height: '15px',
     width: `${progress}%`,
+    animation: `barGrow ${0.2 + progress / 100}s ease-in-out`,
+    transformOrigin: 'left'
   }
 
   return (
