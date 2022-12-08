@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CardsContainer from './components/CardsContainer.jsx';
 import Login from './components/Login.jsx';
 import axios from 'axios';
@@ -20,13 +20,30 @@ const colors = [
   ['xanadu', '#526856']
 ];
 
-const colorProgress = colors.map(([color, code]) => ({ color, code, progress: 50 }));
+const initialColorProgress = colors.map(([color, code]) => ({ color, code, progress: 0 }));
 
 const App = () => {
   const [loggingIn, setLoggingIn] = useState(true);
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [colorProgress, setColorProgress] = useState(initialColorProgress);
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const { data } = await axios.get(`http://localhost:3000/users/${user.username}`);
+        setColorProgress(initialColorProgress.map(colorInfo => {
+          const {color, progress} = colorInfo;
+          return color in data.progress ?
+            {...colorInfo, progress: data.progress[color] } : colorInfo;
+        }))
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    if (user) getUser();
+  }, [user])
 
   const handleCancel = (e) => {
     e.preventDefault();
@@ -36,8 +53,9 @@ const App = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/login', { username, password })
-      console.log(response.data);
+      const response = await axios.post('http://localhost:3000/login', { username, password });
+      setUser(response.data);
+      setLoggingIn(false);
     } catch (err) {
       console.log(err);
     }

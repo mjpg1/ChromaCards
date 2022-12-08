@@ -7,8 +7,11 @@ const ProgressBar = ({ color, progress }) => {
     border: '2px solid black'
   };
 
+  const alpha = Math.floor(256 * (progress / 100)).toString(16);
+  console.log(alpha);
+
   const fillStyle = {
-    backgroundColor: color,
+    background: `linear-gradient(90deg, ${color}1C, ${color}${alpha})`,
     height: '15px',
     width: `${progress}%`
   }

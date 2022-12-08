@@ -26,7 +26,8 @@ const CardDetails = ({ colorDetails }) => {
   return (
     <div style={containerStyle}>
       <img src={`client/assets/${type}-cards/${colorDetails.color}.png`} style={cardStyle} />
-      <ProgressBar color={colorDetails.code} progress={colorDetails.progress} />
+      {colorDetails.progress < 100 &&
+        <ProgressBar color={colorDetails.code} progress={colorDetails.progress} />}
     </div>
   );
 };

@@ -19,7 +19,7 @@ const CardsContainer = ({ colorProgress }) => {
     flexWrap: 'wrap',
     gap: '40px',
     paddingTop: '20px',
-    filter: !currentCard ? '' : 'blur(2px)' // reduce blur or addition transition?
+    filter: !currentCard ? '' : 'blur(1.5px)',
   };
 
   const cards = colorProgress.map(({ color, code, progress}) => 
