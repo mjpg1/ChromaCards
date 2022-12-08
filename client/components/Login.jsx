@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const Login = (props) => {
   return (
-    <div id='login-container'>
+    <div className='modal'>
       <form>
         <input value={props.username} placeholder='username' onChange={props.updateUsername} />
         <input

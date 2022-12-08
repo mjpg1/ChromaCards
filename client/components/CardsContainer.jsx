@@ -18,7 +18,7 @@ const CardsContainer = ({ colorProgress }) => {
     justifyContent: 'center',
     flexWrap: 'wrap',
     gap: '40px',
-    paddingTop: '20px',
+    paddingTop: '10px',
     filter: !currentCard ? '' : 'blur(1.5px)',
   };
 

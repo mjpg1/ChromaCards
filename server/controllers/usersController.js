@@ -74,7 +74,12 @@ usersController.updateUserProgress = async (req, res, next) => {
       user.progress[color] = 0;
     }
     user.progress[color] += 10;
-    res.locals.updatedUser = await user.save();
+    res.locals.updatedUser = await User.findOneAndUpdate(
+      { username },
+      { progress: user.progress },
+      { new: true }
+    );
+    const userInDB = await User.findOne({ username });
     return next();
   } catch (err) {
     return next({

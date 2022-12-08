@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import CardsContainer from './components/CardsContainer.jsx';
 import Login from './components/Login.jsx';
-import axios from 'axios';
+import ProgressBars from './components/ProgressBars.jsx';
 
 const colors = [
   ['absinthe', '#E0E046'], ['ash', '#748484'], ['baker-miller_pink', '#EA8CAA'],
@@ -23,11 +25,12 @@ const colors = [
 const initialColorProgress = colors.map(([color, code]) => ({ color, code, progress: 0 }));
 
 const App = () => {
-  const [loggingIn, setLoggingIn] = useState(true);
+  const [loggingIn, setLoggingIn] = useState(false);
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [colorProgress, setColorProgress] = useState(initialColorProgress);
+  const [checkingProgress, setCheckingProgress] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
@@ -43,6 +46,7 @@ const App = () => {
       }
     }
     if (user) getUser();
+    else setColorProgress(initialColorProgress);
   }, [user])
 
   const handleCancel = (e) => {
@@ -63,11 +67,29 @@ const App = () => {
     setPassword('');
   }
 
+  const handleSignInOut = () => {
+    if (user) setUser(null);
+    if (!user) setLoggingIn(true);
+  };
+
   const updateUsername = (e) => setUsername(e.target.value);
   const updatePassword = (e) => setPassword(e.target.value);
 
   return (
     <div>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+        {user && <i className="bi bi-bar-chart-line-fill" onClick={() => setCheckingProgress(true)}></i>}
+        <button
+          id='login-button'
+          onClick={handleSignInOut}
+          style={{
+            backgroundColor: user ? '#d4e7ee' : 'rgb(150, 150, 150)',
+            border: user ? '1px solid #918f8f' : '1px solid rgb(20, 20, 20)'
+          }}
+        >
+          {user ? 'Sign Out' : 'Sign In'}
+        </button>
+      </div>
       <CardsContainer colorProgress={colorProgress} />
       {loggingIn &&
         <Login
@@ -77,6 +99,11 @@ const App = () => {
           updateUsername={updateUsername}
           username={username}
           password={password}
+        />}
+      {checkingProgress &&
+        <ProgressBars
+          colorProgress={colorProgress}
+          handleCloseProgress={() => setCheckingProgress(false)}
         />}
     </div>
   );

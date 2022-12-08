@@ -1,8 +1,10 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css");
+
 html {
   background-color: rgb(245, 245, 245);
 }
 
-#login-container {
+.modal {
   height: 350px;
   width: 450px;
   border: 1px solid rgb(150, 150, 150);
@@ -16,6 +18,26 @@ html {
   border-radius: 10px;
   display: flex;
   justify-content: center;
+}
+
+i:hover {
+  cursor: pointer;
+}
+
+#progress-modal {
+  width: 70vw;
+  height: 60vh;
+  padding: 20px;
+  align-items: center;
+  text-align: end;
+}
+
+#progress-container {
+  height: 90%;
+  width: 90%;
+  display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  gap: 10px;
 }
 
 form {
@@ -50,4 +72,25 @@ button {
 button:hover {
   box-shadow: rgba(128, 130, 122, 0.2) 0px 7px 15px;
   cursor: pointer;
+}
+
+#login-button {
+  width: 80px;
+  margin: 10px;
+  color: rgb(20, 20, 20);
+}
+
+.card {
+  width: 250px;
+  box-shadow: 2px 4px 13px lightgray;
+  border-radius: 13px;
+}
+
+.card:hover {
+  cursor: pointer;
+}
+
+.bi-bar-chart-line-fill {
+  font-size: 23px;
+  color: #97becc;
 }
