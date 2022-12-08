@@ -1,17 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CardsContainer from './components/CardsContainer.jsx';
-
-// const colors = [
-//   'absinthe', 'ash', 'baker-miller_pink', 'bistre', 'bubblegum_pink', 'cadet_gray',
-//   'cerise', 'chartreuse', 'chrome_yellow', 'cinnabar', 'cochineal', 'cream',
-//   'egyptian_blue', 'fallow', 'gamboge', 'gold', 'ham_pink', 'heliotrope', 'honeydew',
-//   'imperial_yellow', 'jungle_green', 'lime_green', 'mahogany', 'mauve', 'mountbatten_pink',
-//   'mustard', 'neon_green', 'peach_pink', 'prussian_blue', 'saffron', 'scarlet', 'sea_foam',
-//   'shocking_pink', 'taupe', 'tyrian_purple', 'umber', 'uranian_blue', 'violet', 'viridian',
-//   'xanadu'
-// ];
-
-// const colorProgress = colors.map(color => ({ color, progress: 0 }));
+import Login from './components/Login.jsx';
 
 const colors = [
   ['absinthe', '#E0E046'], ['ash', '#748484'], ['baker-miller_pink', '#EA8CAA'],
@@ -30,12 +19,38 @@ const colors = [
   ['xanadu', '#526856']
 ];
 
-const colorProgress = colors.map(([color, code]) => ({ color, code, progress: 0 }));
+const colorProgress = colors.map(([color, code]) => ({ color, code, progress: 50 }));
 
 const App = () => {
+  const [loggingIn, setLoggingIn] = useState(true);
+  const [user, setUser] = useState(null);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleCancel = (e) => {
+    e.preventDefault();
+    setLoggingIn(false);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  }
+
+  const updateUsername = (e) => setUsername(e.target.value);
+  const updatePassword = (e) => setPassword(e.target.value);
+
   return (
     <div>
       <CardsContainer colorProgress={colorProgress} />
+      {loggingIn &&
+        <Login
+          handleCancel={handleCancel}
+          handleSubmit={handleSubmit}
+          updatePassword={updatePassword}
+          updateUsername={updateUsername}
+          username={username}
+          password={password}
+        />}
     </div>
   );
 };
