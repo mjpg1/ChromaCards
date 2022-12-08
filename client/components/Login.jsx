@@ -5,7 +5,12 @@ const Login = (props) => {
     <div id='login-container'>
       <form>
         <input value={props.username} placeholder='username' onChange={props.updateUsername} />
-        <input value={props.password} placeholder='password' onChange={props.updatePassword} />
+        <input
+          type='password'
+          value={props.password}
+          placeholder='password'
+          onChange={props.updatePassword}
+        />
         <div style={{ display: 'flex', width: '220px', gap: '10px' }}>
           <button
             onClick={props.handleSubmit}

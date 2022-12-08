@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import CardsContainer from './components/CardsContainer.jsx';
 import Login from './components/Login.jsx';
+import axios from 'axios';
 
 const colors = [
   ['absinthe', '#E0E046'], ['ash', '#748484'], ['baker-miller_pink', '#EA8CAA'],
@@ -32,8 +33,16 @@ const App = () => {
     setLoggingIn(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:3000/login', { username, password })
+      console.log(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+    setUsername('');
+    setPassword('');
   }
 
   const updateUsername = (e) => setUsername(e.target.value);
