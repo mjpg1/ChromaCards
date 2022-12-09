@@ -95,7 +95,35 @@ button:hover {
   color: #97becc;
 }
 
+.bi-question-circle {
+  font-size: 23px;
+  color: #97becc;
+  margin-right: 5px;
+}
 
+#demo-modal {
+  width: 90vw;
+  height: 80vh;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+#demo-img-container {
+  width: 50%;
+}
+
+#demo-img {
+  width: 100%;
+  cursor: crosshair;
+}
+
+#demo-progress {
+  width: 50%;
+  margin-left: 10px;
+  display: flex;
+  justify-content: center;
+}
 
 @keyframes barGrow {
   0% {

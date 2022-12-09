@@ -4,6 +4,8 @@ import axios from 'axios';
 import CardsContainer from './components/CardsContainer.jsx';
 import Login from './components/Login.jsx';
 import ProgressBars from './components/ProgressBars.jsx';
+import Demo from './components/Demo.jsx';
+import ProgressModal from './components/ProgressModal.jsx';
 
 const colors = [
   ['absinthe', '#E0E046'], ['ash', '#748484'], ['baker-miller_pink', '#EA8CAA'],
@@ -31,6 +33,7 @@ const App = () => {
   const [password, setPassword] = useState('');
   const [colorProgress, setColorProgress] = useState(initialColorProgress);
   const [checkingProgress, setCheckingProgress] = useState(false);
+  const [demoing, setDemoing] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
@@ -75,9 +78,24 @@ const App = () => {
   const updateUsername = (e) => setUsername(e.target.value);
   const updatePassword = (e) => setPassword(e.target.value);
 
+  const handleImgClick = async () => {
+    try {
+      await axios.patch('http://localhost:3000/users/bubblegum_pink', { username: user.username });
+      const { data } = await axios.get(`http://localhost:3000/users/${user.username}`);
+        setColorProgress(initialColorProgress.map(colorInfo => {
+          const {color, progress} = colorInfo;
+          return color in data.progress ?
+            {...colorInfo, progress: data.progress[color] } : colorInfo;
+        }))
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '5px' }}>
+        {user && <i className="bi bi-question-circle" onClick={() => setDemoing(true)}></i>}
         {user && <i className="bi bi-bar-chart-line-fill" onClick={() => setCheckingProgress(true)}></i>}
         <button
           id='login-button'
@@ -100,10 +118,21 @@ const App = () => {
           username={username}
           password={password}
         />}
-      {checkingProgress &&
+      {/* {checkingProgress &&
         <ProgressBars
           colorProgress={colorProgress}
           handleCloseProgress={() => setCheckingProgress(false)}
+        />} */}
+        {checkingProgress &&
+          <ProgressModal
+            colorProgress={colorProgress}
+            handleCloseProgress={() => setCheckingProgress(false)}
+          />}
+      {demoing && 
+        <Demo
+          colorProgress={colorProgress}
+          handleCloseDemo={() => setDemoing(false)}
+          handleImgClick={handleImgClick}
         />}
     </div>
   );
