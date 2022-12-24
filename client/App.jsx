@@ -4,8 +4,9 @@ import axios from 'axios';
 import CardsContainer from './components/CardsContainer.jsx';
 import Login from './components/Login.jsx';
 import ProgressBars from './components/ProgressBars.jsx';
-import Demo from './components/Demo.jsx';
 import ProgressModal from './components/ProgressModal.jsx';
+
+import './stylesheets/styles.css';
 
 const colors = [
   ['absinthe', '#E0E046'], ['ash', '#748484'], ['baker-miller_pink', '#EA8CAA'],
@@ -33,7 +34,6 @@ const App = () => {
   const [password, setPassword] = useState('');
   const [colorProgress, setColorProgress] = useState(initialColorProgress);
   const [checkingProgress, setCheckingProgress] = useState(false);
-  const [demoing, setDemoing] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
@@ -95,7 +95,6 @@ const App = () => {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '5px' }}>
-        {user && <i className="bi bi-question-circle" onClick={() => setDemoing(true)}></i>}
         {user && <i className="bi bi-bar-chart-line-fill" onClick={() => setCheckingProgress(true)}></i>}
         <button
           id='login-button'
@@ -128,12 +127,6 @@ const App = () => {
             colorProgress={colorProgress}
             handleCloseProgress={() => setCheckingProgress(false)}
           />}
-      {demoing && 
-        <Demo
-          colorProgress={colorProgress}
-          handleCloseDemo={() => setDemoing(false)}
-          handleImgClick={handleImgClick}
-        />}
     </div>
   );
 };

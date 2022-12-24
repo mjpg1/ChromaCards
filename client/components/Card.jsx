@@ -6,7 +6,7 @@ const Card = ({ color, gray, selectCard }) => {
   return (
     <img
       className='card'
-      src={`client/assets/${type}-cards/${color}.png`}
+      src={require(`../assets/${type}-cards/${color}.png`).default}
       onClick={selectCard}
     />
   );

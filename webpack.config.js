@@ -1,11 +1,12 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-  entry: './client/index.js',
+  entry: path.resolve(__dirname, './client/index.js'),
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: 'bundle.[contenthash].js',
   },
   mode: process.env.NODE_ENV,
   module: {
@@ -24,17 +25,28 @@ module.exports = {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
       },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: '[name].[hash].[ext]',
+            outputPath: 'images',
+          },
+        },
+      },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './client/index.html',
+      template: './client/template.html',
     }),
+    new CleanWebpackPlugin(),
   ],
   devServer: {
     static: {
-      publicPath: '/',
-      directory: path.resolve(__dirname),
+      publicPath: 'dist',
+      directory: path.resolve(__dirname, 'dist'),
     },
   },
 };
