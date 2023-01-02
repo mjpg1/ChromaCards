@@ -14,4 +14,6 @@ router.patch('/:color', usersController.updateUserProgress, (req, res) => {
   return res.status(200).json(res.locals.updatedUser);
 });
 
+// TODO - add signup and login routes (and get rid of login router)
+
 module.exports = router;

@@ -1,5 +1,7 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css");
 
+/* TODO - make styles more DRY, reusable, add comments? */
+
 html {
   background-color: rgb(245, 245, 245);
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import ProgressBars from './ProgressBars.jsx';
 
+// TODO - move styling into separate style sheet
 const ProgressModal = ({ colorProgress, handleCloseProgress }) => {
   return (
     <div className='modal' id='progress-modal'>

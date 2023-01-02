@@ -2,6 +2,14 @@ const User = require('../models/userModel');
 
 const usersController = {};
 
+/*  TODO
+ ** - createUser should hash password and add new user to db
+ ** - loginUser should verify user credentials
+ ** - getProgress should get user's progress
+ ** - updateProgress should update user's progress
+ ** - require authorization tokens for getting and/or updating progress?
+ */
+
 usersController.loginUser = async (req, res, next) => {
   try {
     const { username, password } = req.body;

@@ -1,5 +1,6 @@
 import React from 'react';
 
+// TODO - move styling into separate style sheet
 const ProgressBar = ({ color, progress, mini }) => {
   const outlineStyleBig = {
     width: '400px',

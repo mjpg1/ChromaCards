@@ -1,6 +1,7 @@
 import React from 'react';
 import ProgressBar from './ProgressBar.jsx';
 
+// TODO - move styling into separate style sheet
 const CardDetails = ({ colorDetails }) => {
   const containerStyle = {
     display: 'flex',

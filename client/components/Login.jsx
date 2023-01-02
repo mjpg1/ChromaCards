@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+// TODO - move styling into separate style sheet
 const Login = (props) => {
   return (
     <div className='modal'>
@@ -17,7 +18,7 @@ const Login = (props) => {
             style={{ backgroundColor: 'rgb(150, 150, 150)' }}
             onSubmit={props.handleSubmit}
           >
-            Submit
+            Log In
           </button>
           <button onClick={props.handleCancel}>Cancel</button>
         </div>

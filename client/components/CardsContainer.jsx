@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Card from './Card.jsx';
 import CardDetails from './CardDetails.jsx';
 
+// TODO - move styling into separate style sheet
 const CardsContainer = ({ colorProgress }) => {
   const [currentCard, setCurrentCard] = useState(null);
 
