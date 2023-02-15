@@ -1,9 +1,24 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css");
 
-/* TODO - make styles more DRY, reusable, add comments? */
-
 html {
   background-color: rgb(245, 245, 245);
+}
+
+#menu {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin: 15px;
+  margin-bottom: 10px;
+}
+
+#all-cards-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  padding-top: 10px;
 }
 
 .modal {
@@ -22,10 +37,6 @@ html {
   justify-content: center;
 }
 
-i:hover {
-  cursor: pointer;
-}
-
 #progress-modal {
   width: 70vw;
   height: 60vh;
@@ -34,6 +45,11 @@ i:hover {
   text-align: end;
 }
 
+i:hover {
+  cursor: pointer;
+}
+
+/* container for progress bars in modal */
 #progress-container {
   height: 90%;
   width: 90%;
@@ -42,6 +58,7 @@ i:hover {
   gap: 10px;
 }
 
+/* login form */
 form {
   display: flex;
   flex-direction: column;
@@ -50,6 +67,7 @@ form {
   gap: 20px;
 }
 
+/* login input */
 input {
   background-color: rgb(230, 230, 230);
   padding: 0.75em;
@@ -63,12 +81,13 @@ input:focus {
   box-shadow: rgba(128, 130, 122, 0.2) 0px 7px 15px;
 }
 
+/* menu buttons and login buttons */
 button {
-  width: 50%;
   padding: 0.5em 0;
   border-radius: 0.3em;
   border: 1px solid rgb(175, 175, 175);
   color: rgb(70, 70, 70);
+  background-color: rgb(150, 150, 150);
 }
 
 button:hover {
@@ -76,57 +95,78 @@ button:hover {
   cursor: pointer;
 }
 
-#login-button {
+#menu > button {
   width: 80px;
-  margin: 10px;
-  color: rgb(20, 20, 20);
+  border: 1px solid rgb(20, 20, 20);
 }
 
+#toggle-signin-button {
+  color: rgb(230, 230, 230);
+  background-color: rgb(80, 80, 80);
+}
+
+#signup-button {
+  background-color: rgb(200, 200, 200);
+}
+
+#login-buttons-container {
+  display: flex;
+  width: 220px;
+  gap: 10px;
+}
+
+#cancel-button {
+  background-color: rgb(245, 245, 245);
+}
+
+/* login and cancel buttons in modal */
+#login-buttons-container > button {
+  width: 50%;
+}
+
+/* regular card (not card details) */
 .card {
   width: 250px;
   box-shadow: 2px 4px 13px lightgray;
   border-radius: 13px;
-}
-
-.card:hover {
   cursor: pointer;
 }
 
+/* container for viewing single card larger along with progress details */
+.card-details-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  z-index: 1;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* single card shown larger along with progress details */
+.card-detailed {
+  width: 350px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px;
+  border-radius: 1.2em;
+}
+
+/* menu icon for opening progress modal */
 .bi-bar-chart-line-fill {
   font-size: 23px;
   color: #97becc;
 }
 
-.bi-question-circle {
-  font-size: 23px;
-  color: #97becc;
-  margin-right: 5px;
+/* 'X' icon for closing modals */
+.bi-x-lg {
+  position: absolute;
+  top: 5%;
+  right: 5%;
 }
 
-#demo-modal {
-  width: 90vw;
-  height: 80vh;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-}
-
-#demo-img-container {
-  width: 50%;
-}
-
-#demo-img {
-  width: 100%;
-  cursor: crosshair;
-}
-
-#demo-progress {
-  width: 50%;
-  margin-left: 10px;
-  display: flex;
-  justify-content: center;
-}
-
+/* animation filling progress bars with color */
 @keyframes barGrow {
   0% {
     transform: scaleX(0);

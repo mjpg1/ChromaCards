@@ -3,13 +3,11 @@ import axios from 'axios';
 
 import colors from '../colors';
 import CardsContainer from './CardsContainer.jsx';
-import Login from './Login.jsx';
+import LoginSignupModal from './LoginSignupModal.jsx';
 import ProgressModal from './ProgressModal.jsx';
 import Menu from './Menu.jsx';
 
 /* TODO
-** - add signup button and signup modal component
-** - add user verification with localStorage and or JWT
 ** - keep user from opening multiple modals/card details at once
 ** - in order to be able to access colors from chrome extension, move colors to db
 */
@@ -18,42 +16,55 @@ import Menu from './Menu.jsx';
 const initialColorProgress = colors.map(([color, code]) => ({ color, code, progress: 0 }));
 
 const Main = () => {
-  const [loggingIn, setLoggingIn] = useState(false); // if a user is logging in, show the login modal
-  const [user, setUser] = useState(null);
+  // show appropriate modals when requested by user
+  const [loggingIn, setLoggingIn] = useState(false);
+  const [signingUp, setSigningUp] = useState(false);
+  const [checkingProgress, setCheckingProgress] = useState(false);
+
+  // keep track of username and password inputs when signing up or logging in
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  // store data about logged-in user and their color progress (or default if no user logged in)
+  const [user, setUser] = useState(null);
   const [colorProgress, setColorProgress] = useState(initialColorProgress);
-  const [checkingProgress, setCheckingProgress] = useState(false); // if a user is checking progress, show progress modal
 
-  // if a user has already logged in (i.e. 'user' in state is not null), retrieve user's color progress
+  // check local storage for logged-in user
   useEffect(() => {
-    const getUserProgress = async () => {
-      try {
-        const { data } = await axios.get(`http://localhost:3000/users/${user.username}`);
-        setColorProgress(initialColorProgress.map(colorInfo => {
-          const {color, progress} = colorInfo;
-          return color in data.progress ?
-            {...colorInfo, progress: data.progress[color] } : colorInfo;
-        }))
-      } catch (err) {
-        console.log(err);
-      }
-    }
+    const currentUser = localStorage.getItem('user');
+    if (currentUser) setUser(JSON.parse(currentUser));
+  }, []);
 
-    if (user) getUserProgress();
-    else setColorProgress(initialColorProgress);
+  // set color progress based on whether or not a user is logged in
+  useEffect(() => {
+    if (user) {
+      setColorProgress(initialColorProgress.map(colorInfo => {
+        const { color, progress } = colorInfo;
+        return color in user.progress ?
+          { ...colorInfo, progress: user.progress[color] } : colorInfo;
+      }));
+    } else {
+      setColorProgress(initialColorProgress);
+    }
   }, [user])
 
-  const handleCancelLogin = (e) => {
+  // close modal if a user clicks 'cancel'
+  const handleCancel = (e) => {
     e.preventDefault();
+    setUsername('');
+    setPassword('');
     setLoggingIn(false);
+    setSigningUp(false);
   };
 
+  // send login request to server when user clicks 'log in' button in login modal
   const handleSubmitLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/login', { username, password });
+      const response = await axios.post('http://localhost:3000/users/login', { username, password });
       setUser(response.data);
+      // add user to localStorage so that user stays logged in on refresh
+      localStorage.setItem('user', JSON.stringify(response.data));
       setLoggingIn(false);
     } catch (err) {
       console.log(err);
@@ -62,36 +73,61 @@ const Main = () => {
     setPassword('');
   }
 
+  const handleSubmitSignup = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:3000/users/signup', { username, password });
+      setUser(response.data);
+      // add user to localStorage so that user stays logged in on refresh
+      localStorage.setItem('user', JSON.stringify(response.data));
+      setSigningUp(false);
+    } catch (err) {
+      console.log(err);
+    }
+    setUsername('');
+    setPassword('');
+  }
+
+  // if signed in, sign user out by setting user in state to null and removing user from local storage
+  // else if a user wants to sign in, open the login modal by setting 'loggingIn' to true
   const handleSignInOut = () => {
-    if (user) setUser(null);
-    if (!user) setLoggingIn(true);
+    if (user) {
+      setUser(null);
+      localStorage.removeItem('user');
+    } else {
+      setLoggingIn(true);
+    }
   };
 
+  // keep username and password fields in the login modal updated in main state
   const updateUsername = (e) => setUsername(e.target.value);
   const updatePassword = (e) => setPassword(e.target.value);
 
+  // always render the menu and cards; display login modal or progress modal when opened
   return (
     <div>
       <Menu
         loggedIn={user !== null}
         setCheckingProgress={setCheckingProgress}
         handleSignInOut={handleSignInOut}
+        handleSignUp={() => setSigningUp(true)}
       />
       <CardsContainer colorProgress={colorProgress} />
-      {loggingIn &&
-        <Login
-          handleCancel={handleCancelLogin}
-          handleSubmit={handleSubmitLogin}
+      {(loggingIn || signingUp) &&
+        <LoginSignupModal
+          loggingIn={loggingIn}
+          handleCancel={handleCancel}
+          handleSubmit={loggingIn ? handleSubmitLogin : handleSubmitSignup}
           updatePassword={updatePassword}
           updateUsername={updateUsername}
           username={username}
           password={password}
         />}
-        {checkingProgress &&
-          <ProgressModal
-            colorProgress={colorProgress}
-            handleCloseProgress={() => setCheckingProgress(false)}
-          />}
+      {checkingProgress &&
+        <ProgressModal
+          colorProgress={colorProgress}
+          handleCloseProgress={() => setCheckingProgress(false)}
+        />}
     </div>
   );
 };

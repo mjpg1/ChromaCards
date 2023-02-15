@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-// TODO - move styling into separate style sheet
-const Login = (props) => {
+const LoginSignupModal = (props) => {
   return (
     <div className='modal'>
       <form>
@@ -12,19 +11,19 @@ const Login = (props) => {
           placeholder='password'
           onChange={props.updatePassword}
         />
-        <div style={{ display: 'flex', width: '220px', gap: '10px' }}>
+        <div id='login-buttons-container'>
           <button
+            id='submit-login-button'
             onClick={props.handleSubmit}
-            style={{ backgroundColor: 'rgb(150, 150, 150)' }}
             onSubmit={props.handleSubmit}
           >
-            Log In
+            {props.loggingIn ? 'Log In' : 'Sign Up'}
           </button>
-          <button onClick={props.handleCancel}>Cancel</button>
+          <button id='cancel-button' onClick={props.handleCancel}>Cancel</button>
         </div>
       </form>
     </div>
   )
 };
 
-export default Login;
+export default LoginSignupModal;

@@ -5,7 +5,6 @@ const cors = require('cors');
 const app = express();
 const PORT = 3000;
 
-const loginRouter = require('./routes/login');
 const usersRouter = require('./routes/users');
 
 mongoose
@@ -20,7 +19,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('client'));
 app.use(cors());
 
-app.use('/login', loginRouter); // FIXME - combine with usersRouter?
 app.use('/users', usersRouter);
 
 app.use((req, res) => res.status(404).send('Page not found'));
