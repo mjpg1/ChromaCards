@@ -1,9 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
+import Login from './Login';
 
-class App extends React.Component {
-  render() {
-    return <h1>Hello World</h1>;
-  }
-}
+const App = () => {
+  return (
+    <div>
+      <h1>Hello World</h1>
+      <Login />
+    </div>
+  );
+};
 
 export default App;
+
+/* TODO
+ * - login
+ * - link to homepage
+ * - eyedropper
+ * - progress bars
+ * - arrows to swipe between "pages" within popup
+ */

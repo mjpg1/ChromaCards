@@ -1,7 +1,7 @@
 /**
  * https://www.youtube.com/watch?v=NxHVnK00Q6k
- * https://stackoverflow.com/questions/12262198/logged-in-on-both-a-website-and-a-chrome-extension
- * https://medium.com/the-andela-way/authenticate-your-chrome-extension-user-through-your-web-app-dbdb96224e41
+ * https://developer.chrome.com/docs/extensions/mv3/tut_oauth/#oauth_client
+ * https://developers.google.com/identity/openid-connect/openid-connect
  */
 
 // document.getElementById('start-eyedropper').addEventListener('click', () => {
@@ -15,7 +15,8 @@
 // });
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 
-ReactDOM.render(<App />, document.querySelector('#root'));
+const root = createRoot(document.getElementById('root'));
+root.render(<App />);
