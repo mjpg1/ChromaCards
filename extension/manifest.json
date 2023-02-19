@@ -6,15 +6,15 @@
   "action": {
     "default_popup": "popup.html"
   },
-  "icons": { "16": "icons/icon16.png",
-             "48": "icons/icon48.png",
-             "128": "icons/icon128.png" },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAin8tjFJV3QMWBr02q2XvbeGo5M//0D5EHRB7fkhXd9gXTYQgNGyN5nCP0wUFQDjtd9/LpSFHFhfnGg7CDzaVtVXm9SBtbM775/XfvYzJDQh+yXqU4/HYVsvQUA6TcDPKtCZyuQWQaWIqTR9tnOZrEG3oHeVFwrGY9qritCIzSdtQRX+5Z+Yb8PjqKrKVxwindCMHw8TG2REIbcj0ZBqo34P8ElLfUyTTlcik2x9fKsWxIGLq14kTqxoBMRd0EmRM08Hh5dBxgWutm5dxLn7IglhIOjebMIQHnQBozYmXCHxB8Yk0GvBsnYFejVrqtwsCs1DCzfKXv/DUDqE8Cnh1ywIDAQAB",
   "oauth2": {
     "client_id": "23452327072-oanar8tr6jda3ah23ej2bd8ulfknnofi.apps.googleusercontent.com",
     "scopes": ["openid", "https://www.googleapis.com/auth/userinfo.email"]
   },
-  "permissions": [
-    "identity"
-  ]
+  "permissions": ["identity"]
 }

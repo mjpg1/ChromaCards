@@ -8,12 +8,16 @@ import ProgressModal from './ProgressModal.jsx';
 import Menu from './Menu.jsx';
 
 /* TODO
-** - keep user from opening multiple modals/card details at once
-** - in order to be able to access colors from chrome extension, move colors to db
-*/
+ ** - keep user from opening multiple modals/card details at once
+ ** - in order to be able to access colors from chrome extension, move colors to db
+ */
 
 // convert 2D array of color names and codes into array of objects with progress set to 0 (when no user signed in)
-const initialColorProgress = colors.map(([color, code]) => ({ color, code, progress: 0 }));
+const initialColorProgress = colors.map(([color, code]) => ({
+  color,
+  code,
+  progress: 0,
+}));
 
 const Main = () => {
   // show appropriate modals when requested by user
@@ -38,15 +42,18 @@ const Main = () => {
   // set color progress based on whether or not a user is logged in
   useEffect(() => {
     if (user) {
-      setColorProgress(initialColorProgress.map(colorInfo => {
-        const { color, progress } = colorInfo;
-        return color in user.progress ?
-          { ...colorInfo, progress: user.progress[color] } : colorInfo;
-      }));
+      setColorProgress(
+        initialColorProgress.map((colorInfo) => {
+          const { color, progress } = colorInfo;
+          return color in user.progress
+            ? { ...colorInfo, progress: user.progress[color] }
+            : colorInfo;
+        })
+      );
     } else {
       setColorProgress(initialColorProgress);
     }
-  }, [user])
+  }, [user]);
 
   // close modal if a user clicks 'cancel'
   const handleCancel = (e) => {
@@ -61,7 +68,10 @@ const Main = () => {
   const handleSubmitLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/users/login', { username, password });
+      const response = await axios.post('http://localhost:3000/users/login', {
+        username,
+        password,
+      });
       setUser(response.data);
       // add user to localStorage so that user stays logged in on refresh
       localStorage.setItem('user', JSON.stringify(response.data));
@@ -71,12 +81,15 @@ const Main = () => {
     }
     setUsername('');
     setPassword('');
-  }
+  };
 
   const handleSubmitSignup = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/users/signup', { username, password });
+      const response = await axios.post('http://localhost:3000/users/signup', {
+        username,
+        password,
+      });
       setUser(response.data);
       // add user to localStorage so that user stays logged in on refresh
       localStorage.setItem('user', JSON.stringify(response.data));
@@ -86,7 +99,7 @@ const Main = () => {
     }
     setUsername('');
     setPassword('');
-  }
+  };
 
   // if signed in, sign user out by setting user in state to null and removing user from local storage
   // else if a user wants to sign in, open the login modal by setting 'loggingIn' to true
@@ -113,7 +126,7 @@ const Main = () => {
         handleSignUp={() => setSigningUp(true)}
       />
       <CardsContainer colorProgress={colorProgress} />
-      {(loggingIn || signingUp) &&
+      {(loggingIn || signingUp) && (
         <LoginSignupModal
           loggingIn={loggingIn}
           handleCancel={handleCancel}
@@ -122,12 +135,14 @@ const Main = () => {
           updateUsername={updateUsername}
           username={username}
           password={password}
-        />}
-      {checkingProgress &&
+        />
+      )}
+      {checkingProgress && (
         <ProgressModal
           colorProgress={colorProgress}
           handleCloseProgress={() => setCheckingProgress(false)}
-        />}
+        />
+      )}
     </div>
   );
 };
