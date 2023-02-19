@@ -8,9 +8,7 @@ const PORT = 3000;
 const usersRouter = require('./routes/users');
 
 mongoose
-  .connect(
-    'mongodb+srv://mjpg:bJAMkKLYctWxT93U@cluster0.rkr5r8i.mongodb.net/colorCards?retryWrites=true&w=majority'
-  )
+  .connect(process.env.DB_URI)
   .then(() => console.log('connected to database'))
   .catch((err) => console.log('error conntecting to database: ', err.message));
 
@@ -18,6 +16,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('client'));
 app.use(cors());
+app.use(
+  cookieSession({
+    name: 'chromacards-session',
+    secret: process.env.SESSION_COOKIE_SECRET,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  })
+);
 
 app.use('/users', usersRouter);
 

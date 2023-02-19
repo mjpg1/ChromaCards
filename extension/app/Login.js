@@ -14,9 +14,6 @@ export default Login;
 
 /* TODO
  * - currently this temporary login button uses getAuthToken, not launchWebAuthFlow
- * - decide which makes more sense for the app
- * - put extension login on hold to setup google oauth with website
- * - finish steps in YT vid linked in index.js
- * - NOTE: may be able to just use this guide instead of all of the above:
- * https://developers.google.com/identity/gsi/web/guides/overview
+ * - instead of either of those, should be able to use same login button + endoint as website
+ * - use YT vid linked in index.js to finish setting up
  */

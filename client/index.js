@@ -5,12 +5,7 @@ import App from './App.jsx';
 
 const root = createRoot(document.getElementById('root'));
 root.render(
-  <GoogleOAuthProvider clientId="23452327072-llnmnes4mcrmd1qmc5e9lg0tj84pga7f.apps.googleusercontent.com">
+  <GoogleOAuthProvider clientId={process.env.CLIENT_ID}>
     <App />
   </GoogleOAuthProvider>
 );
-
-/* TODO
- * use this guide to set up google authentication:
- * https://developers.google.com/identity/gsi/web/guides/overview
- */
