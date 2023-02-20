@@ -3,11 +3,17 @@ import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 
 const LoginSignupModal = (props) => {
-  const handleSuccess = (res) => {
+  const handleSuccess = async (res) => {
     const idToken = res.credential;
-    console.log('id token: ', idToken);
-
-    // TODO make request to login endpoint on backend (see ~19:52 coding in flow vid)
+    try {
+      await axios.post(
+        'http://localhost:3000/users/login',
+        {},
+        { headers: { 'Authorization': `Bearer ${idToken}` } }
+      );
+    } catch (err) {
+      console.log(err);
+    }
   }
   const handleError = (error) => console.log(error);
 

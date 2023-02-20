@@ -1,4 +1,6 @@
 const User = require('../models/userModel');
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.CLIENT_ID);
 
 const usersController = {};
 
@@ -10,22 +12,54 @@ const usersController = {};
  ** - require authorization tokens for getting and/or updating progress?
  */
 
-usersController.loginUser = async (req, res, next) => {
+usersController.verifyUser = async (req, res, next) => {
+  // extract id token from authorization header
+  // TODO - add error handling for nonexistent auth header/bearer token
+  const idToken = req.headers.authorization.split(' ')[1];
+
   try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
-    if (user && password === user.password) {
-      res.locals.user = user;
-      return next();
-    } else {
-      return next({
-        log: 'Error occurred in loginUser middleware: incorrect username or password',
-        message: { err: 'Incorrect username or password' },
-      });
-    }
+    // use google auth library's oauth2 client to verify id token
+    const ticket = await client.verifyIdToken({
+      idToken,
+      audience: [process.env.CLIENT_ID, process.env.EXT_CLIENT_ID],
+    });
+    res.locals.payload = ticket.getPayload();
+    return next();
   } catch (err) {
     return next({
-      log: `Error occurred in loginUser middleware: ${err}`,
+      log: `Error occurred in verifyUser middleware: ${err}`,
+      status: 401,
+      message: { err: 'Unable to verify user' },
+    });
+  }
+};
+
+usersController.loginUser = async (req, res, next) => {
+  // extract user info from google oauth verification
+  const { sub: googleID, given_name, family_name, email } = res.locals.payload;
+
+  try {
+    // see if user with existing google id (sub) exists
+    let user = await User.findOne({ googleID }).exec();
+
+    // make a new user if first sign in
+    if (!user) {
+      user = await User.create({
+        googleID,
+        email,
+        given_name,
+        family_name,
+        progress: {},
+      });
+    }
+
+    // create a new session for user by appending their db id to req.session.userID
+    req.session.userID = user._id;
+    console.log('user: ', user);
+    return next();
+  } catch (err) {
+    return next({
+      log: `Error occurred in loginUser2 middleware: ${err}`,
       message: { err: 'Unable to login user' },
     });
   }

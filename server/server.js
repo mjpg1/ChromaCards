@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const cookieSession = require('cookie-session');
+require('dotenv').config();
 
 const app = express();
 const PORT = 3000;
@@ -16,11 +18,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('client'));
 app.use(cors());
+
+// if no valid session provided with req, this middleware creates a new session cookie attached to req.session
+// otherwise attaches session cookie from client's request
 app.use(
   cookieSession({
     name: 'chromacards-session',
-    secret: process.env.SESSION_COOKIE_SECRET,
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    keys: [process.env.SESSION_COOKIE_SECRET],
+    maxAge: 7 * 24 * 60 * 60 * 1000, // expires after 1 week
   })
 );
 
