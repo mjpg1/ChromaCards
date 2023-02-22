@@ -1,9 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import axios from 'axios';
 
 const Login = () => {
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/users/current');
+        const currentUser = response.data;
+        console.log('currentUser: ', currentUser);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getUser();
+  }, []);
+
   const handleLogin = () => {
-    chrome.identity.getAuthToken({ interactive: true }, (token) => {
-      console.log(token);
+    chrome.tabs.create({
+      url: 'http://localhost:8080/',
+      selected: true,
+      active: true,
     });
   };
 
@@ -11,9 +27,3 @@ const Login = () => {
 };
 
 export default Login;
-
-/* TODO
- * - currently this temporary login button uses getAuthToken, not launchWebAuthFlow
- * - instead of either of those, should be able to use same login button + endoint as website
- * - use YT vid linked in index.js to finish setting up
- */

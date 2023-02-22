@@ -4,19 +4,14 @@ const Menu = ({
   loggedIn,
   setCheckingProgress,
   handleSignInOut,
-  handleSignUp,
 }) => {
   return (
     <div id="menu">
-      {loggedIn ? (
+      {loggedIn && (
         <i
           className="bi bi-bar-chart-line-fill"
           onClick={() => setCheckingProgress(true)}
         ></i>
-      ) : (
-        <button id="signup-button" onClick={handleSignUp}>
-          Sign Up
-        </button>
       )}
       <button
         id="toggle-signin-button"

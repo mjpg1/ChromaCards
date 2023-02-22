@@ -1,7 +1,6 @@
 /**
  * https://www.youtube.com/watch?v=NxHVnK00Q6k
- * https://developer.chrome.com/docs/extensions/mv3/tut_oauth/#oauth_client
- * https://developers.google.com/identity/openid-connect/openid-connect
+ * https://www.youtube.com/watch?v=D5At7vjVmJs
  */
 
 // document.getElementById('start-eyedropper').addEventListener('click', () => {

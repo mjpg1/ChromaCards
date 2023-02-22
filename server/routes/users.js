@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const usersController = require('../controllers/usersController');
 
-router.get('/:username', usersController.getUser, (req, res) => {
+router.get('/current', usersController.getUser, (req, res) => {
   return res.status(200).json(res.locals.user);
 });
 
@@ -10,14 +10,11 @@ router.post(
   '/login',
   usersController.verifyUser,
   usersController.loginUser,
-  (req, res) => {
-    // TODO - eventually update to send more user data
-    return res.sendStatus(200);
-  }
+  (req, res) => res.status(200).json(res.locals.user)
 );
 
-router.post('/signup', usersController.createUser, (req, res) => {
-  return res.status(201).json(res.locals.user);
+router.post('/logout', usersController.logoutUser, (req, res) => {
+  return res.sendStatus(200);
 });
 
 router.patch('/:color', usersController.updateUserProgress, (req, res) => {

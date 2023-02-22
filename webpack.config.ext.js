@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const baseManifest = require('./extension/manifest.json');
 const WebpackExtensionManifestPlugin = require('webpack-extension-manifest-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   mode: 'development',
@@ -40,6 +41,7 @@ module.exports = {
         base: baseManifest,
       },
     }),
+    new Dotenv(),
   ],
   module: {
     rules: [

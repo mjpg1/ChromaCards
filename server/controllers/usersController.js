@@ -5,8 +5,6 @@ const client = new OAuth2Client(process.env.CLIENT_ID);
 const usersController = {};
 
 /*  TODO
- ** - createUser should hash password and add new user to db
- ** - loginUser should verify user credentials
  ** - getProgress should get user's progress
  ** - updateProgress should update user's progress
  ** - require authorization tokens for getting and/or updating progress?
@@ -55,46 +53,32 @@ usersController.loginUser = async (req, res, next) => {
 
     // create a new session for user by appending their db id to req.session.userID
     req.session.userID = user._id;
-    console.log('user: ', user);
+    res.locals.user = user;
     return next();
   } catch (err) {
     return next({
-      log: `Error occurred in loginUser2 middleware: ${err}`,
+      log: `Error occurred in loginUser middleware: ${err}`,
       message: { err: 'Unable to login user' },
     });
   }
 };
 
+usersController.logoutUser = (req, res, next) => {
+  req.session.destroy();
+  return next();
+};
+
 usersController.getUser = async (req, res, next) => {
+  const { userID } = req.session;
+
   try {
-    const { username } = req.params;
-    const user = await User.findOne({ username });
-    if (user) {
-      res.locals.user = user;
-      return next();
-    } else {
-      return next({
-        log: 'Error occurred in getUser middleware: no user found with username',
-        message: { err: 'No user found with that username' },
-      });
-    }
+    let user = await User.findById(userID).exec();
+    res.locals.user = user;
+    return next();
   } catch (err) {
     return next({
       log: `Error occurred in getUser middleware: ${err}`,
       message: { err: 'Unable to find user' },
-    });
-  }
-};
-
-usersController.createUser = async (req, res, next) => {
-  try {
-    const { username, password } = req.body;
-    res.locals.user = await User.create({ username, password, progress: {} });
-    return next();
-  } catch (err) {
-    return next({
-      log: `Error occurred in createUser middleware: ${err}`,
-      message: { err: 'Unable to create new user' },
     });
   }
 };

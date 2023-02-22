@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+axios.defaults.withCredentials = true;
 
 import colors from '../colors';
 import CardsContainer from './CardsContainer.jsx';
@@ -25,19 +26,24 @@ const Main = () => {
   const [signingUp, setSigningUp] = useState(false);
   const [checkingProgress, setCheckingProgress] = useState(false);
 
-  // keep track of username and password inputs when signing up or logging in
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
   // store data about logged-in user and their color progress (or default if no user logged in)
   const [user, setUser] = useState(null);
   const [colorProgress, setColorProgress] = useState(initialColorProgress);
 
-  // check local storage for logged-in user
+  // check for logged in user (based on session cookie)
   useEffect(() => {
-    const currentUser = localStorage.getItem('user');
-    if (currentUser) setUser(JSON.parse(currentUser));
-  }, []);
+    const getUser = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/users/current');
+        const currentUser = response.data;
+        if (currentUser) setUser(currentUser);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getUser();
+  }, [])
+
 
   // set color progress based on whether or not a user is logged in
   useEffect(() => {
@@ -56,65 +62,41 @@ const Main = () => {
   }, [user]);
 
   // close modal if a user clicks 'cancel'
-  const handleCancel = (e) => {
-    e.preventDefault();
-    setUsername('');
-    setPassword('');
+  const handleCancel = () => {
     setLoggingIn(false);
     setSigningUp(false);
   };
 
-  // send login request to server when user clicks 'log in' button in login modal
-  const handleSubmitLogin = async (e) => {
-    e.preventDefault();
+  // send login request to server (by way of google oauth) and set user data in state accordingly
+  const handleLogin = async (res) => {
+    const idToken = res.credential;
     try {
-      const response = await axios.post('http://localhost:3000/users/login', {
-        username,
-        password,
+      const { data } = await axios({
+        method: 'post',
+        url: 'http://localhost:3000/users/login',
+        headers: { 'Authorization': `Bearer ${idToken}` }
       });
-      setUser(response.data);
-      // add user to localStorage so that user stays logged in on refresh
-      localStorage.setItem('user', JSON.stringify(response.data));
+      setUser(data);
       setLoggingIn(false);
     } catch (err) {
       console.log(err);
     }
-    setUsername('');
-    setPassword('');
-  };
-
-  const handleSubmitSignup = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:3000/users/signup', {
-        username,
-        password,
-      });
-      setUser(response.data);
-      // add user to localStorage so that user stays logged in on refresh
-      localStorage.setItem('user', JSON.stringify(response.data));
-      setSigningUp(false);
-    } catch (err) {
-      console.log(err);
-    }
-    setUsername('');
-    setPassword('');
   };
 
   // if signed in, sign user out by setting user in state to null and removing user from local storage
   // else if a user wants to sign in, open the login modal by setting 'loggingIn' to true
-  const handleSignInOut = () => {
+  const handleSignInOut = async () => {
     if (user) {
       setUser(null);
-      localStorage.removeItem('user');
+      try {
+        await axios.post('http://localhost:3000/users/logout');
+      } catch (err) {
+        console.log(err);
+      }
     } else {
       setLoggingIn(true);
     }
   };
-
-  // keep username and password fields in the login modal updated in main state
-  const updateUsername = (e) => setUsername(e.target.value);
-  const updatePassword = (e) => setPassword(e.target.value);
 
   // always render the menu and cards; display login modal or progress modal when opened
   return (
@@ -123,18 +105,13 @@ const Main = () => {
         loggedIn={user !== null}
         setCheckingProgress={setCheckingProgress}
         handleSignInOut={handleSignInOut}
-        handleSignUp={() => setSigningUp(true)}
       />
       <CardsContainer colorProgress={colorProgress} />
       {(loggingIn || signingUp) && (
         <LoginSignupModal
           loggingIn={loggingIn}
           handleCancel={handleCancel}
-          handleSubmit={loggingIn ? handleSubmitLogin : handleSubmitSignup}
-          updatePassword={updatePassword}
-          updateUsername={updateUsername}
-          username={username}
-          password={password}
+          handleLogin={handleLogin}
         />
       )}
       {checkingProgress && (

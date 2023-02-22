@@ -16,5 +16,12 @@
     "client_id": "23452327072-oanar8tr6jda3ah23ej2bd8ulfknnofi.apps.googleusercontent.com",
     "scopes": ["openid", "https://www.googleapis.com/auth/userinfo.email"]
   },
-  "permissions": ["identity"]
+  "host_permissions": [
+    "http://localhost:3000/",
+    "http://localhost:8080/"
+  ],
+  "permissions": [
+    "identity",
+    "cookies"
+  ]
 }
