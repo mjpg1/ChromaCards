@@ -1,21 +1,7 @@
 import React from 'react';
-import Login from './Login';
+import Main from './components/Main';
+import '../static/style.css';
 
-const App = () => {
-  return (
-    <div>
-      <h1>Hello World</h1>
-      <Login />
-    </div>
-  );
-};
+const App = () => <Main />;
 
 export default App;
-
-/* TODO
- * - login
- * - link to homepage
- * - eyedropper
- * - progress bars
- * - arrows to swipe between "pages" within popup
- */

@@ -4,12 +4,6 @@ const client = new OAuth2Client(process.env.CLIENT_ID);
 
 const usersController = {};
 
-/*  TODO
- ** - getProgress should get user's progress
- ** - updateProgress should update user's progress
- ** - require authorization tokens for getting and/or updating progress?
- */
-
 usersController.verifyUser = async (req, res, next) => {
   // extract id token from authorization header
   // TODO - add error handling for nonexistent auth header/bearer token
@@ -72,7 +66,7 @@ usersController.getUser = async (req, res, next) => {
   const { userID } = req.session;
 
   try {
-    let user = await User.findById(userID).exec();
+    const user = await User.findById(userID).exec();
     res.locals.user = user;
     return next();
   } catch (err) {
@@ -83,10 +77,11 @@ usersController.getUser = async (req, res, next) => {
   }
 };
 
+// TODO - add color validation and avoid querying db for user twice
 usersController.updateUserProgress = async (req, res, next) => {
   try {
-    const { username } = req.body;
-    const user = await User.findOne({ username });
+    const { userID } = req.session;
+    const user = await User.findById(userID).exec();
     if (!user) {
       return next({
         log: 'Error occurred in updateUserProgress middleware: user must be logged in to update',
@@ -94,18 +89,17 @@ usersController.updateUserProgress = async (req, res, next) => {
         message: { err: 'Must be logged in to update progress' },
       });
     }
-    // PROBLEM: NO COLOR VALIDATION
+    // FIXME: ADD COLOR VALIDATION
     const { color } = req.params;
     if (!(color in user.progress)) {
       user.progress[color] = 0;
     }
     user.progress[color] += 10;
     res.locals.updatedUser = await User.findOneAndUpdate(
-      { username },
+      { _id: userID },
       { progress: user.progress },
       { new: true }
     );
-    const userInDB = await User.findOne({ username });
     return next();
   } catch (err) {
     return next({

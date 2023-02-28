@@ -11,6 +11,9 @@ import Menu from './Menu.jsx';
 /* TODO
  ** - keep user from opening multiple modals/card details at once
  ** - in order to be able to access colors from chrome extension, move colors to db
+ ** - instead of signin button, have default page when user isn't logged in include a modal
+ **   - introducing new player to game, inviting them to login
+ **   - sign in with google button
  */
 
 // convert 2D array of color names and codes into array of objects with progress set to 0 (when no user signed in)

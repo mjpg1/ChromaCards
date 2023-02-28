@@ -9,3 +9,8 @@ root.render(
     <App />
   </GoogleOAuthProvider>
 );
+
+/** (a couple resources on google oauth with extensions)
+ * https://www.youtube.com/watch?v=NxHVnK00Q6k
+ * https://www.youtube.com/watch?v=D5At7vjVmJs
+ */
