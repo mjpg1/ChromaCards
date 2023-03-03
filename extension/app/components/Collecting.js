@@ -1,4 +1,6 @@
 import React from 'react';
+import hex2deltaE from '../../../utils/colorConversion';
+import colors from '../../../colors';
 
 const Collecting = ({ user }) => {
   const startEyedropper = () => {
@@ -6,7 +8,12 @@ const Collecting = ({ user }) => {
     eyedropper
       .open()
       .then((result) => {
-        console.log(result.sRGBHex);
+        console.log('clicked: ', result.sRGBHex);
+        for (let [color, hex] of colors) {
+          if (hex2deltaE(result.sRGBHex, hex) <= 10) {
+            console.log('match: ', color);
+          }
+        }
       })
       .catch((err) => console.log(err));
   };

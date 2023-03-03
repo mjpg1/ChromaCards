@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 axios.defaults.withCredentials = true;
 
-import colors from '../colors';
+import colors from '../../colors';
 import CardsContainer from './CardsContainer.jsx';
 import LoginSignupModal from './LoginSignupModal.jsx';
 import ProgressModal from './ProgressModal.jsx';
