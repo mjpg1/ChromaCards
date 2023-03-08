@@ -1,4 +1,6 @@
 const User = require('../models/userModel');
+// TODO - currently need separate files for colors as ES6/CommonJS modules
+const colors = require('../colors.js');
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.CLIENT_ID);
 
@@ -89,11 +91,19 @@ usersController.updateUserProgress = async (req, res, next) => {
         message: { err: 'Must be logged in to update progress' },
       });
     }
-    // FIXME: ADD COLOR VALIDATION
+    // TODO - for efficient lookup, use a diff data structure for colors
     const { color } = req.params;
-    if (!(color in user.progress)) {
-      user.progress[color] = 0;
+    if (!colors.find(([name, _]) => name === color)) {
+      return next({
+        log: 'Error occurred in updateUserProgress middleware: color name not in database',
+        status: 400,
+        message: { err: 'Invalid color name' },
+      });
     }
+
+    if (!(color in user.progress)) user.progress[color] = 0;
+    // TODO - make increments to color progress smaller and/or dependent on color
+    // TODO - ADD MECHANISM FOR CHECKING IF PROGRESS HAS REACHED 100 PERCENT - and don't let progress go past 100
     user.progress[color] += 10;
     res.locals.updatedUser = await User.findOneAndUpdate(
       { _id: userID },
