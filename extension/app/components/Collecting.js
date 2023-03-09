@@ -1,22 +1,31 @@
 import React from 'react';
 import hex2deltaE from '../../../utils/colorConversion';
 import colors from '../../../colors.js';
+import axios from 'axios';
 
 const Collecting = ({ user }) => {
-  const startEyedropper = () => {
+  const startEyedropper = async () => {
     const eyedropper = new EyeDropper();
-    // TODO - switch from then chaining to async/await
-    eyedropper
-      .open()
-      .then((result) => {
-        const match = colors.find(
-          ([color, hex]) => hex2deltaE(result.sRGBHex, hex) <= 10
+    try {
+      const clickedColor = await eyedropper.open();
+      // TODO - for more efficient matching, could try to sort local color db data structure
+      const [colorMatch, _] = colors.find(
+        ([color, hex]) => hex2deltaE(clickedColor.sRGBHex, hex) <= 10
+      );
+
+      if (colorMatch) {
+        const updatedUser = await axios.patch(
+          `http://localhost:3000/users/${colorMatch}`
         );
-        // if (match) // send request to server with color and user info to update progress
-        // else // notify user if no match found
-        // TODO - add throttling mechanism to prevent repetitive clicking of the same spot?
-      })
-      .catch((err) => console.log(err));
+        // TODO - notify user and add throttling mechanism to prevent repetitive clicking of the same spot
+        console.log('updated user: ', updatedUser.data);
+      } else {
+        // TODO - notify user in a more meaningful way
+        console.log('no match');
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

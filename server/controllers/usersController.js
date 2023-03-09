@@ -79,7 +79,7 @@ usersController.getUser = async (req, res, next) => {
   }
 };
 
-// TODO - add color validation and avoid querying db for user twice
+// TODO - avoid querying db for user twice
 usersController.updateUserProgress = async (req, res, next) => {
   try {
     const { userID } = req.session;
@@ -91,7 +91,7 @@ usersController.updateUserProgress = async (req, res, next) => {
         message: { err: 'Must be logged in to update progress' },
       });
     }
-    // TODO - for efficient lookup, use a diff data structure for colors
+    // TODO - for efficient lookup, use a diff/sorted data structure for colors
     const { color } = req.params;
     if (!colors.find(([name, _]) => name === color)) {
       return next({
