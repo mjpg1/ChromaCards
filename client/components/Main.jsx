@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import userService from '../services/user';
-import { setUser } from '../reducers/userSlice';
+import { getAndSetUser, loginAndSetUser, logoutAndSetUser } from '../reducers/userSlice';
 import { setColorProgress } from '../reducers/colorProgressSlice';
 
 import CardsContainer from './CardsContainer.jsx';
@@ -28,13 +27,8 @@ const Main = () => {
 
   // check for logged in user (based on session cookie)
   useEffect(() => {
-    userService.getUser()
-      .then(currentUser => {
-        if (currentUser) dispatch(setUser(currentUser));
-      })
-      .catch(err => console.log(err))
-  }, [])
-
+    dispatch(getAndSetUser());
+  }, []);
 
   // set color progress based on whether or not a user is logged in
   useEffect(() => {
@@ -47,28 +41,15 @@ const Main = () => {
   // send login request to server (by way of google oauth) and set user data in state accordingly
   const handleLogin = async (res) => {
     const idToken = res.credential;
-    try {
-      const newUser = await userService.loginUser(idToken);
-      dispatch(setUser(newUser));
-      setLoggingIn(false);
-    } catch (err) {
-      console.log(err);
-    }
+    dispatch(loginAndSetUser(idToken));
+    setLoggingIn(false);
   };
 
   // if signed in, sign user out by setting user in state to null and removing user from local storage
   // else if a user wants to sign in, open the login modal by setting 'loggingIn' to true
   const handleSignInOut = async () => {
-    if (user) {
-      dispatch(setUser(null));
-      try {
-        await userService.logoutUser();
-      } catch (err) {
-        console.log(err);
-      }
-    } else {
-      setLoggingIn(true);
-    }
+    if (user) dispatch(logoutAndSetUser());
+    else setLoggingIn(true);
   };
 
   // always render the menu and cards; display login modal or progress modal when opened
