@@ -12,8 +12,8 @@ import Menu from './Menu.jsx';
 /* TODO
  ** - keep user from opening multiple modals/card details at once
  ** - instead of signin button, have default page when user isn't logged in include a modal
- **   - introducing new player to game, inviting them to login
- **   - sign in with google button
+ **   -> introducing new player to game, inviting them to login
+ **   -> sign in with google button
  */
 
 const Main = () => {

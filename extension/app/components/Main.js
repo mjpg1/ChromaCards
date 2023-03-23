@@ -1,22 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+// TODO - find a better place to locate for easy access from web app and extension
+import { getAndSetUser } from '../../../client/reducers/userSlice';
+
 import Login from './Login';
 import Collecting from './Collecting';
 
 const Main = () => {
-  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/users/current');
-        const currentUser = response.data;
-        if (currentUser) setUser(currentUser);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getUser();
+    dispatch(getAndSetUser());
   }, []);
 
   return (
