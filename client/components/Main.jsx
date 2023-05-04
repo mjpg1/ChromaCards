@@ -11,8 +11,6 @@ import ProgressBars from './ProgressBars.jsx';
 import Menu from './Menu.jsx';
 
 /* TODO
- ** - keep user from opening multiple modals/card details at once
- **   -> https://medium.com/tinyso/how-to-create-a-modal-component-in-react-from-basic-to-advanced-a3357a2a716a
  ** - instead of signin button, have default page when user isn't logged in include a modal
  **   -> introducing new player to game, inviting them to login
  **   -> sign in with google button
@@ -38,7 +36,10 @@ const Main = () => {
   }, [user]);
 
   // close modal if a user clicks 'cancel'
-  const handleCancel = () => setLoggingIn(false);
+  const handleCancel = () => {
+    setLoggingIn(false);
+    setCheckingProgress(false);
+  };
 
   // send login request to server (by way of google oauth) and set user data in state accordingly
   const handleLogin = async (res) => {
@@ -69,7 +70,7 @@ const Main = () => {
         </Modal>
       )}
       {checkingProgress && (
-        <Modal handleCancel={() => setCheckingProgress(false)}>
+        <Modal handleCancel={handleCancel}>
           <ProgressBars colorProgress={colorProgress} />
         </Modal>
       )}
