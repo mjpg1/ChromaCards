@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Card from './Card.jsx';
 import CardDetails from './CardDetails.jsx';
 
+// this component renders all the cards AND one card's CardDetails if selected
 const CardsContainer = ({ colorProgress }) => {
   const [currentCard, setCurrentCard] = useState(null);
 
@@ -22,13 +23,11 @@ const CardsContainer = ({ colorProgress }) => {
     />
   ));
 
+  // if the outer div spanning most (but not all) of the page is clicked, the current card is unselected
   return (
-    <div onClick={unselectCard}>
-      {currentCard && <CardDetails colorDetails={currentCard} />}
-      <div
-        id="all-cards-container"
-        style={{ filter: !currentCard ? '' : 'blur(1.5px)' }}
-      >
+    <div>
+      {currentCard && <CardDetails colorDetails={currentCard} handleCancel={unselectCard} />}
+      <div id="all-cards-container">
         {cards}
       </div>
     </div>

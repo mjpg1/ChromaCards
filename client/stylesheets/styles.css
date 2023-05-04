@@ -21,7 +21,17 @@ html {
   padding-top: 10px;
 }
 
-.modal {
+/* overlay that spans rest of screen anytime a modal is open, dims and can be clicked to close modal */
+.modal-overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
   height: 350px;
   width: 450px;
   border: 1px solid rgb(150, 150, 150);
@@ -37,14 +47,6 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-#progress-modal {
-  width: 70vw;
-  height: 60vh;
-  padding: 20px;
-  align-items: center;
-  text-align: end;
 }
 
 i:hover {
@@ -151,8 +153,7 @@ button:hover {
 /* single card shown larger along with progress details */
 .card-detailed {
   width: 350px;
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px,
-    rgba(0, 0, 0, 0.05) 0px 5px 10px;
+  box-shadow: 0px 0px 24px 10px rgba(149, 157, 165, 0.2);
   border-radius: 1.2em;
 }
 

@@ -5,12 +5,12 @@ import { getAndSetUser, loginAndSetUser, logoutAndSetUser } from '../reducers/us
 import { setColorProgress } from '../reducers/colorProgressSlice';
 
 import CardsContainer from './CardsContainer.jsx';
-import LoginSignupModal from './LoginSignupModal.jsx';
-import ProgressModal from './ProgressModal.jsx';
+import Login from './Login.jsx';
+import Modal from './Modal.jsx';
+import ProgressBars from './ProgressBars.jsx';
 import Menu from './Menu.jsx';
 
 /* TODO
- ** - keep user from opening multiple modals/card details at once
  ** - instead of signin button, have default page when user isn't logged in include a modal
  **   -> introducing new player to game, inviting them to login
  **   -> sign in with google button
@@ -36,7 +36,10 @@ const Main = () => {
   }, [user]);
 
   // close modal if a user clicks 'cancel'
-  const handleCancel = () => setLoggingIn(false);
+  const handleCancel = () => {
+    setLoggingIn(false);
+    setCheckingProgress(false);
+  };
 
   // send login request to server (by way of google oauth) and set user data in state accordingly
   const handleLogin = async (res) => {
@@ -62,17 +65,14 @@ const Main = () => {
       />
       <CardsContainer colorProgress={colorProgress} />
       {loggingIn && (
-        <LoginSignupModal
-          loggingIn={loggingIn}
-          handleCancel={handleCancel}
-          handleLogin={handleLogin}
-        />
+        <Modal handleCancel={handleCancel}>
+          <Login handleLogin={handleLogin} />
+        </Modal>
       )}
       {checkingProgress && (
-        <ProgressModal
-          colorProgress={colorProgress}
-          handleCloseProgress={() => setCheckingProgress(false)}
-        />
+        <Modal handleCancel={handleCancel}>
+          <ProgressBars colorProgress={colorProgress} />
+        </Modal>
       )}
     </div>
   );

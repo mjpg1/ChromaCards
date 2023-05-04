@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// TODO - find a better place to locate for easy access from web app and extension
+// TODO - find a better place to locate store for easy access from web app and extension
 import { getAndSetUser } from '../../../client/reducers/userSlice';
 
 import Login from './Login';
