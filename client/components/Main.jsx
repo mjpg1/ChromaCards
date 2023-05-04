@@ -5,12 +5,14 @@ import { getAndSetUser, loginAndSetUser, logoutAndSetUser } from '../reducers/us
 import { setColorProgress } from '../reducers/colorProgressSlice';
 
 import CardsContainer from './CardsContainer.jsx';
-import LoginSignupModal from './LoginSignupModal.jsx';
-import ProgressModal from './ProgressModal.jsx';
+import Login from './Login.jsx';
+import Modal from './Modal.jsx';
+import ProgressBars from './ProgressBars.jsx';
 import Menu from './Menu.jsx';
 
 /* TODO
  ** - keep user from opening multiple modals/card details at once
+ **   -> https://medium.com/tinyso/how-to-create-a-modal-component-in-react-from-basic-to-advanced-a3357a2a716a
  ** - instead of signin button, have default page when user isn't logged in include a modal
  **   -> introducing new player to game, inviting them to login
  **   -> sign in with google button
@@ -62,17 +64,14 @@ const Main = () => {
       />
       <CardsContainer colorProgress={colorProgress} />
       {loggingIn && (
-        <LoginSignupModal
-          loggingIn={loggingIn}
-          handleCancel={handleCancel}
-          handleLogin={handleLogin}
-        />
+        <Modal handleCancel={handleCancel}>
+          <Login handleLogin={handleLogin} />
+        </Modal>
       )}
       {checkingProgress && (
-        <ProgressModal
-          colorProgress={colorProgress}
-          handleCloseProgress={() => setCheckingProgress(false)}
-        />
+        <Modal handleCancel={() => setCheckingProgress(false)}>
+          <ProgressBars colorProgress={colorProgress} />
+        </Modal>
       )}
     </div>
   );
