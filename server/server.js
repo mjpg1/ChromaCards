@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 require('dotenv').config();
 
 const app = express();
@@ -25,23 +26,19 @@ app.use(
 );
 
 // if no valid session provided with req, this middleware creates a new session cookie attached to req.session
-// otherwise attaches session cookie from client's request
-/* TODO
- * - currently relying on express-session's built in memory store
- * - should ultimatley switch to redis for production
- *   - https://blog.jscrambler.com/best-practices-for-secure-session-management-in-node
- *   - https://expressjs.com/en/advanced/best-practice-security.html
- *   - https://www.youtube.com/watch?v=IPAvfcodcI8
- */
+// otherwise attaches session cookie from client's request; session data is stored in mongo db
 app.set('trust proxy', 1);
 app.use(
   session({
     name: 'chromacards-session',
     secret: process.env.SESSION_COOKIE_SECRET,
+    store: MongoStore.create({
+      mongoUrl: process.env.DB_URI,
+    }),
     resave: false,
     saveUninitialized: false,
     cookie: {
-      maxAge: 7 * 24 * 60 * 60 * 1000, // expires after 1 week
+      maxAge: 30 * 24 * 60 * 60 * 1000, // expires after 1 month
     },
   })
 );
