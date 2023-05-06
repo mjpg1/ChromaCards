@@ -17,8 +17,12 @@ router.post('/logout', usersController.logoutUser, (req, res) => {
   return res.sendStatus(200);
 });
 
-router.patch('/:color', usersController.updateUserProgress, (req, res) => {
-  return res.status(200).json(res.locals.updatedUser);
-});
+router.patch(
+  '/:userID/:color',
+  usersController.updateUserProgress,
+  (req, res) => {
+    return res.status(200).json(res.locals.updatedUser);
+  }
+);
 
 module.exports = router;

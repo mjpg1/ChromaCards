@@ -90,23 +90,24 @@ usersController.getUser = async (req, res, next) => {
 
 // TODO - avoid querying db for user twice
 usersController.updateUserProgress = async (req, res, next) => {
+  const { userID, color } = req.params;
+
+  // TODO - for efficient lookup, use a diff/sorted data structure for colors
+  if (!colors.find(([name, _]) => name === color)) {
+    return next({
+      log: 'Error occurred in updateUserProgress middleware: color name not in database',
+      status: 400,
+      message: { err: 'Invalid color name' },
+    });
+  }
+
   try {
-    const { userID } = req.session;
     const user = await User.findById(userID).exec();
     if (!user) {
       return next({
         log: 'Error occurred in updateUserProgress middleware: user must be logged in to update',
         status: 401,
         message: { err: 'Must be logged in to update progress' },
-      });
-    }
-    // TODO - for efficient lookup, use a diff/sorted data structure for colors
-    const { color } = req.params;
-    if (!colors.find(([name, _]) => name === color)) {
-      return next({
-        log: 'Error occurred in updateUserProgress middleware: color name not in database',
-        status: 400,
-        message: { err: 'Invalid color name' },
       });
     }
 

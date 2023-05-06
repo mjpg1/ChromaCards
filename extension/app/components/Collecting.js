@@ -15,7 +15,7 @@ const Collecting = ({ user }) => {
 
       if (colorMatch) {
         const updatedUser = await axios.patch(
-          `http://localhost:3000/users/${colorMatch}`
+          `http://localhost:3000/users/${user._id}/${colorMatch}`
         );
         // TODO - notify user and add throttling mechanism to prevent repetitive clicking of the same spot
         console.log('updated user: ', updatedUser.data);
