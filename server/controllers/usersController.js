@@ -68,11 +68,19 @@ usersController.logoutUser = (req, res, next) => {
 
 usersController.getUser = async (req, res, next) => {
   const { userID, id: sessionID } = req.session;
+
+  // currently, when local server is stopped, the userID is no longer appended to the session
+  // however the session persists in the db and can be verified against the cookie sent from the client
   if (!userID && sessionID) {
     // if sessionID exists in mongo db store, get user ID from that session
     const userSession = await Session.findById(sessionID);
     if (userSession) {
       userID = JSON.parse(userSession.session).userID;
+    } else {
+      return next({
+        log: 'Error occurred in getUser middleware: no session with given id found in database',
+        message: { err: 'Unable to verify user session' },
+      });
     }
   }
 
@@ -88,7 +96,7 @@ usersController.getUser = async (req, res, next) => {
   }
 };
 
-// TODO - avoid querying db for user twice
+// TODO - avoid querying db for user twice (currently necessary to see if color is in progress yet)
 usersController.updateUserProgress = async (req, res, next) => {
   const { userID, color } = req.params;
 
@@ -112,9 +120,9 @@ usersController.updateUserProgress = async (req, res, next) => {
     }
 
     if (!(color in user.progress)) user.progress[color] = 0;
-    // TODO - make increments to color progress smaller and/or dependent on color
-    // TODO - ADD MECHANISM FOR CHECKING IF PROGRESS HAS REACHED 100 PERCENT - and don't let progress go past 100
-    user.progress[color] += 10;
+    // TODO - make increments to color progress smaller and/or dependent on color?
+    // add 10 to color's progress while keeping progress from surpassing 100
+    user.progress[color] = Math.min(user.progress[color] + 10, 100);
     res.locals.updatedUser = await User.findOneAndUpdate(
       { _id: userID },
       { progress: user.progress },
