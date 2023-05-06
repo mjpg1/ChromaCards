@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const Session = require('../models/sessionModel');
 // TODO - currently need separate files for colors as ES6/CommonJS modules
 const colors = require('../colors.js');
 const { OAuth2Client } = require('google-auth-library');
@@ -48,6 +49,7 @@ usersController.loginUser = async (req, res, next) => {
     }
 
     // create a new session for user by appending their db id to req.session.userID
+    // TODO: verify that this is necessary even with session stored in db
     req.session.userID = user._id;
     res.locals.user = user;
     return next();
@@ -65,7 +67,14 @@ usersController.logoutUser = (req, res, next) => {
 };
 
 usersController.getUser = async (req, res, next) => {
-  const { userID } = req.session;
+  const { userID, id: sessionID } = req.session;
+  if (!userID && sessionID) {
+    // if sessionID exists in mongo db store, get user ID from that session
+    const userSession = await Session.findById(sessionID);
+    if (userSession) {
+      userID = JSON.parse(userSession.session).userID;
+    }
+  }
 
   try {
     const user = await User.findById(userID).exec();
